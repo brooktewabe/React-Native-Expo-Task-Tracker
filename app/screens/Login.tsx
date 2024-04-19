@@ -6,26 +6,30 @@ import { useNavigation } from "@react-navigation/native";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { onLogin } = useAuth();
   const navigation = useNavigation();
 
   const login = async () => {
     const result = await onLogin!(email, password);
     if (result && result.error) {
-      alert(result.msg);
+      setError(result.message);
     }
   };
 
   return (
-  <View style={styles.container}>
-    <Image source={{uri:'https://galaxies.dev/img/logos/logo--blue.png'}} style={styles.image}></Image>
-    <View style={styles.form}>
-        <TextInput style={styles.input} placeholder="Email" onChangeText={(text: string)=> setEmail(text)} value={email}/>
-        <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} onChangeText={(text: string)=> setPassword(text)} value={password}/>
-        <Button title="Sign In" onPress={login}/>
-        <Button title="Create Account" onPress={()=>navigation.navigate('Signup')}/>
+    <View style={styles.container}>
+      <Image source={{ uri: 'https://galaxies.dev/img/logos/logo--blue.png' }} style={styles.image}></Image>
+      <View style={styles.form}>
+        <TextInput style={styles.input} placeholder="Email" onChangeText={(text: string) => setEmail(text)} value={email} />
+        <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} onChangeText={(text: string) => setPassword(text)} value={password} />
+
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+
+        <Button title="Sign In" onPress={login} />
+        <Button title="Create Account" onPress={() => navigation.navigate('Signup')} />
+      </View>
     </View>
-  </View>
   )
 };
 
@@ -50,5 +54,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
+  error: {
+    color: 'red',
+    marginBottom: 10,
+  }
 });
+
 export default Login;
