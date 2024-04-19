@@ -72,7 +72,7 @@ const Signup = () => {
   const [userName, setUserName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [address, setAddress] = useState("");
-  const [isBuyer, setIsBuyer] = useState("");
+  const [isBuyer, setIsBuyer] = useState(false);
   const [profilePic, setProfilePic] = useState("");
 
   const { onLogin, onRegister } = useAuth();
@@ -144,12 +144,12 @@ const Signup = () => {
           onChangeText={(text: string) => setAddress(text)}
           value={address}
         />
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder="Are you a buyer"
           onChangeText={(text: string) => setIsBuyer(text)}
           value={isBuyer}
-        />
+        /> */}
         <TextInput
           style={styles.input}
           placeholder="Profile Picture"
