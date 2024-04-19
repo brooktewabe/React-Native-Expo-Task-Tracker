@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { ScrollView, View, Text, StyleSheet } from "react-native";
 import axios from "axios";
 import { API_URL } from "../context/AuthContext";
 
@@ -30,24 +30,28 @@ const Home = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      {userData.map((user) => (
-        <View key={user._id} style={styles.userContainer}>
-          <Text style={styles.userName}>{`${user.firstName} ${user.lastName}`}</Text>
-          <Text>Email: {user.email}</Text>
-          <Text>Username: {user.userName}</Text>
-          <Text>Address: {user.address}</Text>
-          <Text>Profile Picture: {user.profilePic}</Text>
-          <Text>Buyer: {user.isBuyer ? "Yes" : "No"}</Text>
-        </View>
-      ))}
-    </View>
+    <ScrollView style={styles.scrollView}>
+      <View style={styles.container}>
+        {userData.map((user) => (
+          <View key={user._id} style={styles.userContainer}>
+            <Text style={styles.userName}>{`${user.firstName} ${user.lastName}`}</Text>
+            <Text>Email: {user.email}</Text>
+            <Text>Username: {user.userName}</Text>
+            <Text>Address: {user.address}</Text>
+            <Text>Profile Picture: {user.profilePic}</Text>
+            <Text>Buyer: {user.isBuyer ? "Yes" : "No"}</Text>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  scrollView: {
     flex: 1,
+  },
+  container: {
     padding: 10,
   },
   userContainer: {
