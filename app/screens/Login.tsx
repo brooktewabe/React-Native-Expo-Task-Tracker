@@ -1,25 +1,18 @@
 import { View, Text, Image, StyleSheet, TextInput, Button } from "react-native";
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { onLogin, onRegister } = useAuth();
+  const { onLogin } = useAuth();
+  const navigation = useNavigation();
 
   const login = async () => {
     const result = await onLogin!(email, password);
     if (result && result.error) {
       alert(result.msg);
-    }
-  };
-  // We automatically call the login after a successful registration
-  const register = async () => {
-    const result = await onRegister!(email, password);
-    if (result && result.error) {
-      alert(result.msg);
-    } else {
-      login();
     }
   };
 
@@ -30,7 +23,7 @@ const Login = () => {
         <TextInput style={styles.input} placeholder="Email" onChangeText={(text: string)=> setEmail(text)} value={email}/>
         <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} onChangeText={(text: string)=> setPassword(text)} value={password}/>
         <Button title="Sign In" onPress={login}/>
-        <Button title="Create Account" onPress={register}/>
+        <Button title="Create Account" onPress={()=>navigation.navigate('Signup')}/>
     </View>
   </View>
   )
