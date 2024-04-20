@@ -1,14 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, View } from 'react-native';
-import { AuthProvider, useAuth } from './app/context/AuthContext';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './app/screens/Home';
-import Login from './app/screens/Login';
-import SignUp from './app/screens/Signup';
-import Profile from './app/screens/Profile';
+import { StatusBar } from "expo-status-bar";
+import { Button, StyleSheet, Text, View } from "react-native";
+import { AuthProvider, useAuth } from "./app/context/AuthContext";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Home from "./app/screens/Home";
+import Login from "./app/screens/Login";
+import SignUp from "./app/screens/Signup";
+import Profile from "./app/screens/Profile";
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
@@ -24,19 +24,23 @@ export const Layout = () => {
     <NavigationContainer>
       <Stack.Navigator>
         {authState?.authenticated ? (
-          <Stack.Screen name="Home" component={Home}
-          options={{
-              headerRight: () => (
-                <View style={styles.headerButtons}>
-                  <Button onPress={onLogout} title='Sign Out'/>
-                </View>
-              ),
-            }}
+          <>
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={{
+                headerRight: () => (
+                  <View style={styles.headerButtons}>
+                    <Button onPress={onLogout} title="Sign Out" />
+                  </View>
+                ),
+              }}
             />
-          ) : (
-            <>
-            <Stack.Screen name="Profile" component={Profile} />
-            <Stack.Screen options={{headerShown: false,}} name="Login" component={Login} />
+            <Stack.Screen name="Profile" component={Profile}/>
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Signup" component={SignUp} />
           </>
         )}

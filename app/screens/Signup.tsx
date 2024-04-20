@@ -34,6 +34,14 @@ const Signup = () => {
       errors.email = "Email is invalid.";
     }
     if (!password) errors.password = "Password is required";
+    if (!confirmPassword) errors.confirmPassword = "Confirm password is required";
+    if (password !== confirmPassword) {
+      errors.confirmPassword = "Passwords do not match";
+    }
+    if (!firstName) errors.firstName = "Firstname is required";
+    if (!lastName) errors.lastName = "Lastname is required";
+    if (!userName) errors.userName = "Username is required";
+    if (!address) errors.address = "Address is required";
 
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -57,6 +65,12 @@ const Signup = () => {
     if (validateForm()) {
       console.log("Submitted", email);
       setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setFirstName("");
+      setLastName("");
+      setUserName("");
+      setAddress("");
       setErrors({});
     }
     const result = await onRegister!(
@@ -91,12 +105,18 @@ const Signup = () => {
             onChangeText={(text: string) => setFirstName(text)}
             value={firstName}
           />
+          {errors.firstName ? (
+            <Text style={styles.errorText}>{errors.firstName}</Text>
+          ) : null}
           <TextInput
             style={styles.input}
             placeholder="Last name"
             onChangeText={(text: string) => setLastName(text)}
             value={lastName}
           />
+          {errors.lastName ? (
+            <Text style={styles.errorText}>{errors.lastName}</Text>
+          ) : null}
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -112,6 +132,9 @@ const Signup = () => {
             onChangeText={(text: string) => setUserName(text)}
             value={userName}
           />
+          {errors.userName ? (
+            <Text style={styles.errorText}>{errors.userName}</Text>
+          ) : null}
           <TextInput
             style={styles.input}
             placeholder="Password"
@@ -119,6 +142,9 @@ const Signup = () => {
             onChangeText={(text: string) => setPassword(text)}
             value={password}
           />
+          {errors.password ? (
+            <Text style={styles.errorText}>{errors.password}</Text>
+          ) : null}
           <TextInput
             style={styles.input}
             placeholder="Confirm Password"
@@ -126,12 +152,18 @@ const Signup = () => {
             onChangeText={(text: string) => setConfirmPassword(text)}
             value={confirmPassword}
           />
+          {errors.confirmPassword ? (
+            <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+          ) : null}
           <TextInput
             style={styles.input}
             placeholder="Address"
             onChangeText={(text: string) => setAddress(text)}
             value={address}
           />
+          {errors.address ? (
+            <Text style={styles.errorText}>{errors.address}</Text>
+          ) : null}
           {/* <TextInput
           style={styles.input}
           placeholder="Are you a buyer"
