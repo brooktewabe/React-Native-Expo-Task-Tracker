@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ScrollView, View, Text, StyleSheet, Image, Button, TouchableOpacity } from "react-native";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
+
 import { API_URL } from "../context/AuthContext";
 
 interface UserData {
@@ -27,7 +29,7 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const scrollViewRef = useRef<ScrollView>(null);
-
+  const navigation = useNavigation();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -82,10 +84,11 @@ const Home = () => {
 
   return (
     <ScrollView
-      ref={scrollViewRef}
-      style={styles.scrollView}
-      contentContainerStyle={styles.contentContainer}
+    ref={scrollViewRef}
+    style={styles.scrollView}
+    contentContainerStyle={styles.contentContainer}
     >
+      <Button title="Profile"  onPress={() => navigation.navigate('Profile')}></Button>
       <View style={styles.container}>
         {userData.map((user) => (
           <View key={user._id} style={styles.userContainer}>
