@@ -97,7 +97,7 @@ const Home = () => {
             <Text>Email: {user.email}</Text>
             <Text>Username: {user.userName}</Text>
             <Text>Address: {user.address}</Text>
-            <Text>Buyer: {user.isBuyer ? "Yes" : "No"}</Text>
+            {user.isBuyer && <Text>Buyer: Yes</Text>}
           </View>
         ))}
         <View style={styles.paginationContainer}>
