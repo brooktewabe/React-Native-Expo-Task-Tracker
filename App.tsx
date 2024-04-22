@@ -7,14 +7,18 @@ import Home from "./app/screens/Home";
 import Login from "./app/screens/Login";
 import SignUp from "./app/screens/Signup";
 import Profile from "./app/screens/Profile";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Layout></Layout>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <Layout></Layout>
+      </AuthProvider>
+    </Provider>
   );
 }
 
@@ -36,11 +40,15 @@ export const Layout = () => {
                 ),
               }}
             />
-            <Stack.Screen name="Profile" component={Profile}/>
+            <Stack.Screen name="Profile" component={Profile} />
           </>
         ) : (
           <>
-            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen
+              name="Login"
+              // options={{ headerShown: false }}
+              component={Login}
+            />
             <Stack.Screen name="Signup" component={SignUp} />
           </>
         )}

@@ -110,7 +110,7 @@ const Home = () => {
       style={styles.scrollView}
       contentContainerStyle={styles.contentContainer}
     >
-      <View>
+      <View style={styles.profileContainer}>
         <Icon
           name="user"
           size={30}
@@ -162,13 +162,15 @@ const styles = StyleSheet.create({
   container: {
     paddingBottom: 100, // to make space for the pagination buttons
   },
+  profileContainer: {
+    alignItems: "flex-end",
+  },
   userContainer: {
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
     paddingBottom: 10,
     marginBottom: 10,
   },
-  profile: {},
   userName: {
     fontSize: 18,
     fontWeight: "bold",

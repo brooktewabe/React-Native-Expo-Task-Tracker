@@ -1,131 +1,69 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Button,
-  ScrollView,
-} from "react-native";
-import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
+import React, { useState } from 'react';
+import { View, TextInput, Button, StyleSheet, Alert, ScrollView } from 'react-native';
+import { API_URL } from "../context/AuthContext";
+import axios from 'axios';
+import { Update } from '@reduxjs/toolkit';
 
+const userId = ''; 
 
-const Signup = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [userName, setUserName] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [address, setAddress] = useState("");
-  const [isBuyer, setIsBuyer] = useState(false);
-  const [profilePic, setProfilePic] = useState(
-    "https://galaxies.dev/img/logos/logo--blue.png"
-  ); // Default profile picture
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+const UpdateProfileScreen = () => {
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [userName, setUserName] = useState('');
 
-  const validateForm = () => {
-    let errors: { [key: string]: string } = {};
-
-    if (!email) {
-      errors.email = "Email is required.";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "Email is invalid.";
-    }
-    if (!password) errors.password = "Password is required";
-    if (!confirmPassword)
-      errors.confirmPassword = "Confirm password is required";
-    if (password !== confirmPassword) {
-      errors.confirmPassword = "Passwords do not match";
-    }
-    if (!firstName || !lastName) errors.firstName = "Required";
-    if (!lastName) errors.lastName = "Required";
-    if (!userName) errors.userName = "Username is required";
-    if (!address) errors.address = "Address is required";
-
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-
-  const { onRegister } = useAuth();
-
-  const register = async () => {
-    if (validateForm()) {
-      console.log("Submitted", email);
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-      setFirstName("");
-      setLastName("");
-      setUserName("");
-      setAddress("");
-      setErrors({});
-    }
-    const result = await onRegister!(
+  const handleUpdateProfile = () => {
+    const updatedUserInfo = {
       email,
-      password,
       firstName,
       lastName,
       userName,
-      confirmPassword,
-      address,
-      isBuyer,
-      profilePic
-    );
-    if (result && result.error) {
-      console.log(result.message);
-    } else {
-      // login();
-    }
+      // Add other fields as needed
+    };
+
+    axios.put(`${API_URL}/profile?id=${userId}`, updatedUserInfo)
+      .then(response => {
+        Alert.alert('Success', 'Profile updated successfully');
+      })
+      .catch(error => {
+        Alert.alert('Error', 'Failed to update profile');
+        console.error('Error updating profile:', error);
+      });
   };
+
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
     <View style={styles.container}>
 
       <View style={styles.form}>
-      <View style={styles.locationContainer}>
 
         <TextInput
-          style={styles.NameInput}
+          style={styles.input}
           placeholder="First name"
           onChangeText={(text: string) => setFirstName(text)}
           value={firstName}
         />
-        {errors.firstName ? (
-          <Text style={styles.errorText}>{errors.firstName}</Text>
-        ) : null}
         <TextInput
-          style={styles.NameInput}
+          style={styles.input}
           placeholder="Last name"
           onChangeText={(text: string) => setLastName(text)}
           value={lastName}
         />
-        {errors.lastName ? (
-          <Text style={styles.errorText}>{errors.lastName || errors.firstName}</Text>
-        ) : null}
-        </View>
+
         <TextInput
           style={styles.input}
           placeholder="Email"
           onChangeText={(text: string) => setEmail(text)}
           value={email}
         />
-        {errors.email ? (
-          <Text style={styles.errorText}>{errors.email}</Text>
-        ) : null}
         <TextInput
           style={styles.input}
           placeholder="Username"
           onChangeText={(text: string) => setUserName(text)}
           value={userName}
         />
-        {errors.userName ? (
-          <Text style={styles.errorText}>{errors.userName}</Text>
-        ) : null}
-
-        <Button title="Update Account" onPress={register} />
+        <Button title="Update Account" /*onPress={Update}*/ />
       </View>
     </View>
     </ScrollView>
@@ -202,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Signup;
+export default UpdateProfileScreen;

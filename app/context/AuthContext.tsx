@@ -11,7 +11,6 @@ interface AuthProps {
 
 const TOKEN_KEY = "my-jwt";
 export const API_URL = "http://143.198.168.244:3000/api/users";
-// export const API_URL = "https://api.developbetterapps.com";
 
 const AuthContext = createContext<AuthProps>({});
 

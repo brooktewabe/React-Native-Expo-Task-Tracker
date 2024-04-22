@@ -2,6 +2,8 @@ import { View, Text, Image, StyleSheet, TextInput, Button, TouchableOpacity } fr
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
+// import { useDispatch } from "react-redux";
+// import { loginUser } from "../../store/authSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,12 +11,14 @@ const Login = () => {
   const [error, setError] = useState("");
   const { onLogin } = useAuth();
   const navigation = useNavigation();
-
+  // const dispatch = useDispatch()
+  //   let userCredentials=(email,password)
+  //   dispatch(loginUser(userCredentials))
   const login = async () => {
     const result = await onLogin!(email, password);
     if (result && result.error) {
       setError(result.message);
-    }
+  }
   };
 
   return (
