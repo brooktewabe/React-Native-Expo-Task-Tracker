@@ -1,8 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
-import { ScrollView, View, Text, StyleSheet, Image, Button, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-
+import Icon from "react-native-vector-icons/FontAwesome";
 import { API_URL } from "../context/AuthContext";
 
 interface UserData {
@@ -16,10 +24,18 @@ interface UserData {
   isBuyer: boolean;
 }
 
-const PaginationButton: React.FC<{ page: number; active: boolean; onPress: () => void }> = ({ page, active, onPress }) => {
+// pagination and active status for the opened page
+const PaginationButton: React.FC<{
+  page: number;
+  active: boolean;
+  onPress: () => void;
+}> = ({ page, active, onPress }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.paginationButton, active && styles.activePaginationButton]}>
-      <Text style={active && { fontWeight: 'bold' }}>{page}</Text>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.paginationButton, active && styles.activePaginationButton]}
+    >
+      <Text style={active && { fontWeight: "bold" }}>{page}</Text>
     </TouchableOpacity>
   );
 };
@@ -30,6 +46,7 @@ const Home = () => {
   const [totalPages, setTotalPages] = useState(1);
   const scrollViewRef = useRef<ScrollView>(null);
   const navigation = useNavigation();
+  // re-render on page change
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,7 +93,12 @@ const Home = () => {
     const buttons = [];
     for (let i = 1; i <= totalPages; i++) {
       buttons.push(
-        <PaginationButton key={i} page={i} active={i === page} onPress={() => goToPage(i)} />
+        <PaginationButton
+          key={i}
+          page={i}
+          active={i === page}
+          onPress={() => goToPage(i)}
+        />
       );
     }
     return buttons;
@@ -84,16 +106,32 @@ const Home = () => {
 
   return (
     <ScrollView
-    ref={scrollViewRef}
-    style={styles.scrollView}
-    contentContainerStyle={styles.contentContainer}
+      ref={scrollViewRef}
+      style={styles.scrollView}
+      contentContainerStyle={styles.contentContainer}
     >
-      <Button title="Profile"  onPress={() => navigation.navigate('Profile')}></Button>
+      <View>
+        <Icon
+          name="user"
+          size={30}
+          color="#900"
+          onPress={() => navigation.navigate("Profile")}
+        />
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          <Text style={styles.profile}>Profile</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.container}>
         {userData.map((user) => (
           <View key={user._id} style={styles.userContainer}>
-            <Text style={styles.userName}>{`${user.firstName} ${user.lastName}`}</Text>
-            <Image source={{ uri: user.profilePic }} style={styles.profilePic} />
+            <Text
+              style={styles.userName}
+            >{`${user.firstName} ${user.lastName}`}</Text>
+            <Image
+              // source={{ uri: user.profilePic }}
+              source={{ uri: 'https://galaxies.dev/img/logos/logo--blue.png' }}
+              style={styles.profilePic}
+            />
             <Text>Email: {user.email}</Text>
             <Text>Username: {user.userName}</Text>
             <Text>Address: {user.address}</Text>
@@ -102,11 +140,11 @@ const Home = () => {
         ))}
         <View style={styles.paginationContainer}>
           <TouchableOpacity onPress={prevPage} disabled={page === 1}>
-            <Text style={styles.paginationButton}>{'<'}</Text>
+            <Text style={styles.paginationButton}>{"<"}</Text>
           </TouchableOpacity>
           {renderPaginationButtons()}
           <TouchableOpacity onPress={nextPage} disabled={page === totalPages}>
-            <Text style={styles.paginationButton}>{'>'}</Text>
+            <Text style={styles.paginationButton}>{">"}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -130,6 +168,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     marginBottom: 10,
   },
+  profile: {},
   userName: {
     fontSize: 18,
     fontWeight: "bold",

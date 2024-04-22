@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }: any) => {
   };
   
   const logout = async () => {
-    // remove the token from Storage and revoke authentication
+    // remove the token from Storage
     await SecureStore.deleteItemAsync(TOKEN_KEY);
     setAuthState({
       token: null,

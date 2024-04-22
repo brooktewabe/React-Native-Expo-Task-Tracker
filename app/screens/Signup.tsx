@@ -1,11 +1,9 @@
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   TextInput,
   Button,
-  ScrollView,
   SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -127,33 +125,29 @@ const Signup = () => {
     console.log("Updated Address:", address);
   }, [address]);
   return (
-    // <ScrollView contentContainerStyle={styles.scrollViewContent}>
     <View style={styles.container}>
-      {/* <Image
-          source={{ uri: "https://galaxies.dev/img/logos/logo--blue.png" }}
-          style={styles.image}
-        /> */}
       <View style={styles.form}>
-      <View style={styles.locationContainer}>
-
-        <TextInput
-          style={styles.NameInput}
-          placeholder="First name"
-          onChangeText={(text: string) => setFirstName(text)}
-          value={firstName}
-        />
-        {errors.firstName ? (
-          <Text style={styles.errorText}>{errors.firstName}</Text>
-        ) : null}
-        <TextInput
-          style={styles.NameInput}
-          placeholder="Last name"
-          onChangeText={(text: string) => setLastName(text)}
-          value={lastName}
-        />
-        {errors.lastName ? (
-          <Text style={styles.errorText}>{errors.lastName || errors.firstName}</Text>
-        ) : null}
+        <View style={styles.locationContainer}>
+          <TextInput
+            style={styles.NameInput}
+            placeholder="First name"
+            onChangeText={(text: string) => setFirstName(text)}
+            value={firstName}
+          />
+          {errors.firstName ? (
+            <Text style={styles.errorText}>{errors.firstName}</Text>
+          ) : null}
+          <TextInput
+            style={styles.NameInput}
+            placeholder="Last name"
+            onChangeText={(text: string) => setLastName(text)}
+            value={lastName}
+          />
+          {errors.lastName ? (
+            <Text style={styles.errorText}>
+              {errors.lastName || errors.firstName}
+            </Text>
+          ) : null}
         </View>
         <TextInput
           style={styles.input}
@@ -205,9 +199,7 @@ const Signup = () => {
           <SafeAreaView style={styles.autocompleteContainer}>
             <GooglePlacesAutocomplete
               placeholder={
-                mapClicked
-                  ? `${address}`
-                  : "Type place or click map icon"
+                mapClicked ? `${address}` : "Type place or click map icon"
               }
               onPress={(data, details = null) => {
                 setAddress(data.description);
@@ -232,17 +224,6 @@ const Signup = () => {
         {errors.address ? (
           <Text style={styles.errorText}>{errors.address}</Text>
         ) : null}
-        {/* <TextInput
-          style={styles.input}
-          placeholder="Are you a buyer"
-          onChangeText={(text: string) => setIsBuyer(text)}
-          value={isBuyer}
-        /> */}
-        {/* <Image
-            
-              source={{ uri: profilePic }}
-              style={styles.profilePic}
-            /> */}
         <View style={styles.dropdownContainer}>
           <Text>Role:</Text>
           <RNPickerSelect
@@ -260,11 +241,6 @@ const Signup = () => {
 };
 
 const styles = StyleSheet.create({
-  image: {
-    width: "100%", // Full width
-    aspectRatio: 2, // Aspect ratio 2:1
-    resizeMode: "contain",
-  },
   form: {
     width: "60%",
     alignSelf: "center",
@@ -272,16 +248,16 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 44,
-    width:250,
+    width: 250,
     borderWidth: 1,
     borderRadius: 4,
     padding: 10,
     backgroundColor: "#fff",
     marginBottom: 10,
-  },  
+  },
   NameInput: {
     height: 44,
-    width:125,
+    width: 125,
     borderWidth: 1,
     borderRadius: 4,
     padding: 10,
