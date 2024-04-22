@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, TextInput, Button } from "react-native";
+import { View, Text, Image, StyleSheet, TextInput, Button, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
@@ -27,7 +27,7 @@ const Login = () => {
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
         <Button title="Sign In" onPress={login} />
-        <Button title="Create Account" onPress={() => navigation.navigate('Signup')} />
+        <TouchableOpacity onPress={() => navigation.navigate('Signup')} ><Text style={styles.link}>Create Account</Text></TouchableOpacity>
       </View>
     </View>
   )
@@ -53,6 +53,15 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     width: "100%",
+  },
+  link:{
+    fontSize: 20,
+    textAlign: 'center',
+    marginLeft: 35,
+    marginRight: 35,
+    marginTop: 0,
+    marginBottom: 10,
+    color: '#00a3cc'
   },
   error: {
     color: 'red',

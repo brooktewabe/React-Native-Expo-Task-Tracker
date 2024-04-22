@@ -27,7 +27,7 @@ const App = () => {
     });
 
     if (addressResponse.length > 0) {
-      setAddress(addressResponse[0].city + ", " + addressResponse[0].country);
+      setAddress(addressResponse[0]);
       console.log("Address:", address);
     } else {
       console.log("Address not found");
