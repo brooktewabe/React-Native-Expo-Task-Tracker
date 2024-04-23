@@ -56,7 +56,7 @@ const Home = () => {
         setUserData(response.data.data);
         setTotalPages(Math.ceil(response.data.total / 10)); // Assuming 10 items per page
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error, please reload:", error);
       }
     };
     fetchData();
@@ -112,9 +112,8 @@ const Home = () => {
     >
       <View style={styles.profileContainer}>
         <Icon
-          name="user"
+          name="user-circle"
           size={30}
-          color="#900"
           onPress={() => navigation.navigate("Profile")}
         />
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
@@ -129,7 +128,7 @@ const Home = () => {
             >{`${user.firstName} ${user.lastName}`}</Text>
             <Image
               // source={{ uri: user.profilePic }}
-              source={{ uri: 'https://galaxies.dev/img/logos/logo--blue.png' }}
+              source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/120px-User-avatar.svg.png?20201213175635' }}
               style={styles.profilePic}
             />
             <Text>Email: {user.email}</Text>

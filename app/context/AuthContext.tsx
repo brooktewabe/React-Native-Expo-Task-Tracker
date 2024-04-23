@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
+import { useDispatch } from 'react-redux';
+import { loginSuccess, setUserData } from '../../store/authSlice';
 
 interface AuthProps {
   authState?: { token: string | null; authenticated: boolean | null };
@@ -17,7 +19,6 @@ const AuthContext = createContext<AuthProps>({});
 export const useAuth = () => {
   return useContext(AuthContext);
 };
-
 export const AuthProvider = ({ children }: any) => {
   const [authState, setAuthState] = useState<{
     token: string | null;
@@ -26,6 +27,8 @@ export const AuthProvider = ({ children }: any) => {
     token: null,
     authenticated: null,
   });
+
+  const dispatch = useDispatch(); // Move useDispatch outside of the login function
 
   useEffect(() => {
     const loadToken = async () => {
@@ -50,10 +53,13 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
   
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, dispatch: any) => { // Pass dispatch as an argument
     try {
       const result = await axios.post(`${API_URL}/login`, { email, password });
-      console.log("Login result:", result);
+      console.log("Login result:", result.data);
+      // then store this data in redux store to be fetched for update
+      dispatch(loginSuccess({ token: result.data.token }));
+      dispatch(setUserData({ userData: result.data }));
       setAuthState({
         token: result.data.token,
         authenticated: true,
@@ -79,7 +85,7 @@ export const AuthProvider = ({ children }: any) => {
 
   const value = {
     onRegister: register,
-    onLogin: login,
+    onLogin: (email: string, password: string) => login(email, password, dispatch), // Pass dispatch to login
     onLogout: logout,
     authState,
   };

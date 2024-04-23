@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, TextInput, Button, StyleSheet, ScrollView, Text } from 'react-native';
 import { API_URL } from "../context/AuthContext";
 import axios from 'axios';
-import { Update } from '@reduxjs/toolkit';
-
-const userId = ''; 
+import { useDispatch, useSelector } from 'react-redux';
 
 const UpdateProfileScreen = () => {
   const [email, setEmail] = useState('');
@@ -12,60 +10,69 @@ const UpdateProfileScreen = () => {
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
 
+  const userData = useSelector((state) => state.auth.userData);
+  // const dispatch = useDispatch();
+
   const handleUpdateProfile = () => {
     const updatedUserInfo = {
       email,
       firstName,
       lastName,
       userName,
-      // Add other fields as needed
     };
 
-    axios.put(`${API_URL}/profile?id=${userId}`, updatedUserInfo)
+    console.log('Updating profile with:', updatedUserInfo); 
+
+    axios.put(`${API_URL}/profile?id=${userData.id}`, updatedUserInfo)
       .then(response => {
-        Alert.alert('Success', 'Profile updated successfully');
+        console.log('Success', 'Profile updated successfully');
       })
       .catch(error => {
-        Alert.alert('Error', 'Failed to update profile');
+        console.log('Error', 'Failed to update profile');
         console.error('Error updating profile:', error);
       });
   };
 
+  useEffect(() => {
+    if (userData) {
+      setEmail(userData.email || '');
+      setFirstName(userData.firstName || '');
+      setLastName(userData.lastName || '');
+      setUserName(userData.userName || '');
+    }
+  }, [userData]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
-    <View style={styles.container}>
-
-      <View style={styles.form}>
-
-        <TextInput
-          style={styles.input}
-          placeholder="First name"
-          onChangeText={(text: string) => setFirstName(text)}
-          value={firstName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Last name"
-          onChangeText={(text: string) => setLastName(text)}
-          value={lastName}
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={(text: string) => setEmail(text)}
-          value={email}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          onChangeText={(text: string) => setUserName(text)}
-          value={userName}
-        />
-        <Button title="Update Account" /*onPress={Update}*/ />
+      <View style={styles.container}>
+        <View style={styles.form}>
+          <TextInput
+            style={styles.input}
+            placeholder="First name"
+            onChangeText={(text: string) => setFirstName(text)}
+            value={firstName}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Last name"
+            onChangeText={(text: string) => setLastName(text)}
+            value={lastName}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            onChangeText={(text: string) => setEmail(text)}
+            value={email}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            onChangeText={(text: string) => setUserName(text)}
+            value={userName}
+          />
+          <Button title="Update Account" onPress={handleUpdateProfile} />
+        </View>
       </View>
-    </View>
     </ScrollView>
   );
 };
