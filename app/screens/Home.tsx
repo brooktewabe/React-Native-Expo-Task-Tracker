@@ -33,7 +33,7 @@ const PaginationButton: React.FC<{
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.paginationButton, active && styles.activePaginationButton]}
+      style={[styles.paginationButton]}
     >
       <Text style={active && { fontWeight: "bold" }}>{page}</Text>
     </TouchableOpacity>
