@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, StyleSheet, ScrollView, Text } from 'react-native';
 import { API_URL } from "../context/AuthContext";
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import { setUserData } from '../../store/authSlice';
 
 const UpdateProfileScreen = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +12,7 @@ const UpdateProfileScreen = () => {
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+   const dispatch = useDispatch();
 
   const navigation = useNavigation();
 
@@ -29,6 +31,8 @@ const UpdateProfileScreen = () => {
     axios.put(`${API_URL}/profile?id=${userData._id}`, updatedUserInfo)
       .then(response => {
         console.log('Success', 'Profile updated successfully');
+        dispatch(setUserData({ userData: response.data }));
+
         setSuccessMessage('Profile updated successfully');
       })
       .catch(error => {
