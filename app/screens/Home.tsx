@@ -117,7 +117,7 @@ const Home = () => {
           onPress={() => navigation.navigate("Profile")}
         />
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-          <Text style={styles.profile}>Profile</Text>
+          <Text>Profile</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
