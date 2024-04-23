@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }: any) => {
     authenticated: null,
   });
 
-  const dispatch = useDispatch(); // Move useDispatch outside of the login function
+  const dispatch = useDispatch(); // call dispatch
 
   useEffect(() => {
     const loadToken = async () => {

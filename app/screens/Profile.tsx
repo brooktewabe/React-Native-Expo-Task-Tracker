@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, StyleSheet, ScrollView, Text } from 'react-native';
 import { API_URL } from "../context/AuthContext";
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 const UpdateProfileScreen = () => {
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const navigation = useNavigation();
 
   const userData = useSelector((state) => state.auth.userData);
-  // const dispatch = useDispatch();
 
   const handleUpdateProfile = () => {
     const updatedUserInfo = {
@@ -23,13 +26,14 @@ const UpdateProfileScreen = () => {
 
     console.log('Updating profile with:', updatedUserInfo); 
 
-    axios.put(`${API_URL}/profile?id=${userData.id}`, updatedUserInfo)
+    axios.put(`${API_URL}/profile?id=${userData._id}`, updatedUserInfo)
       .then(response => {
         console.log('Success', 'Profile updated successfully');
+        setSuccessMessage('Profile updated successfully');
       })
       .catch(error => {
-        console.log('Error', 'Failed to update profile');
         console.error('Error updating profile:', error);
+        setSuccessMessage('');
       });
   };
 
@@ -41,7 +45,16 @@ const UpdateProfileScreen = () => {
       setUserName(userData.userName || '');
     }
   }, [userData]);
-
+  useEffect(() => {
+    if (successMessage) {
+      const timeout = setTimeout(() => {
+        setSuccessMessage('');
+        // Redirect to home screen
+        navigation.navigate('Home');
+      }, 2000); // Delay for 2 seconds
+      return () => clearTimeout(timeout);
+    }
+  }, [successMessage]);
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
@@ -70,6 +83,7 @@ const UpdateProfileScreen = () => {
             onChangeText={(text: string) => setUserName(text)}
             value={userName}
           />
+           {successMessage ? <Text style={styles.successMessage}>{successMessage}</Text> : null}
           <Button title="Update Account" onPress={handleUpdateProfile} />
         </View>
       </View>
@@ -78,11 +92,6 @@ const UpdateProfileScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  image: {
-    width: "100%", // Full width
-    aspectRatio: 2, // Aspect ratio 2:1
-    resizeMode: "contain",
-  },
   form: {
     width: "60%",
     alignSelf: "center",
@@ -97,14 +106,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginBottom: 10,
   },  
-  NameInput: {
-    height: 44,
-    width:125,
-    borderWidth: 1,
-    borderRadius: 4,
-    padding: 10,
-    backgroundColor: "#fff",
-    marginBottom: 10,
+  successMessage: {
+    color: 'green',
+    alignSelf: 'center',
+    marginTop: 10,
   },
   container: {
     alignItems: "center",
