@@ -17,6 +17,7 @@ const UpdateProfileScreen = () => {
   const navigation = useNavigation();
 
   const userData = useSelector((state) => state.auth.userData);
+  // console.log('Redux Store Data:', userData);
 
   const handleUpdateProfile = () => {
     const updatedUserInfo = {
