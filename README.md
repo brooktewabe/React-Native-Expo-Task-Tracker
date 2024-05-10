@@ -1,11 +1,13 @@
-## Frontend Exercise
+## React Native Expo App
 
-SignUp, login, home and Profile screens
+- Typescript 
 
-SignUp includes - Google Places Autocompelete, Fetch current location, Error handling
+- SignUp, login, home and Profile screens
 
-Login - A simple JWT login
+- SignUp includes - Google Places Autocompelete, Fetch current location, Error handling
 
-Home - display data from the API
+- Login - A simple JWT login
 
-Profile - to update info used in signUp (initially display what is stored in redux store)
+- Home - display data from the API
+
+- Profile - to update info used in signUp (initially display what is stored in redux store)
