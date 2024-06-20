@@ -5,6 +5,8 @@ import {
   TextInput,
   Button,
   SafeAreaView,
+  Image,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import RNPickerSelect from "react-native-picker-select";
@@ -125,149 +127,133 @@ const Signup = () => {
     console.log("Updated Address:", address);
   }, [address]);
   return (
-    <View style={styles.container}>
-      <View style={styles.form}>
-        <View style={styles.locationContainer}>
+    // <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <SafeAreaView style={styles.container}>
+
+        <View style={styles.form}>
+          <View style={styles.row}>
           <TextInput
-            style={styles.NameInput}
-            placeholder="First name"
-            onChangeText={(text: string) => setFirstName(text)}
-            value={firstName}
+              style={styles.NameInput}
+              placeholder="First name"
+              onChangeText={(text: string) => setFirstName(text)}
+              value={firstName}
+            />
+            {errors.firstName ? (
+              <Text style={styles.errorText}>{errors.firstName}</Text>
+            ) : null}
+            
+            <TextInput
+              style={styles.NameInput}
+              placeholder="Last name"
+              onChangeText={(text: string) => setLastName(text)}
+              value={lastName}
+            />
+            {errors.lastName ? (
+              <Text style={styles.errorText}>
+                {errors.lastName || errors.firstName}
+              </Text>
+            ) : null}
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            onChangeText={(text: string) => setEmail(text)}
+            value={email}
           />
-          {errors.firstName ? (
-            <Text style={styles.errorText}>{errors.firstName}</Text>
+          {errors.email ? (
+            <Text style={styles.errorText}>{errors.email}</Text>
           ) : null}
           <TextInput
-            style={styles.NameInput}
-            placeholder="Last name"
-            onChangeText={(text: string) => setLastName(text)}
-            value={lastName}
+            style={styles.input}
+            placeholder="Username"
+            onChangeText={(text: string) => setUserName(text)}
+            value={userName}
           />
-          {errors.lastName ? (
-            <Text style={styles.errorText}>
-              {errors.lastName || errors.firstName}
-            </Text>
+          {errors.userName ? (
+            <Text style={styles.errorText}>{errors.userName}</Text>
           ) : null}
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          onChangeText={(text: string) => setEmail(text)}
-          value={email}
-        />
-        {errors.email ? (
-          <Text style={styles.errorText}>{errors.email}</Text>
-        ) : null}
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          onChangeText={(text: string) => setUserName(text)}
-          value={userName}
-        />
-        {errors.userName ? (
-          <Text style={styles.errorText}>{errors.userName}</Text>
-        ) : null}
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={(text: string) => setPassword(text)}
-          value={password}
-        />
-        {errors.password ? (
-          <Text style={styles.errorText}>{errors.password}</Text>
-        ) : null}
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          secureTextEntry={true}
-          onChangeText={(text: string) => setConfirmPassword(text)}
-          value={confirmPassword}
-        />
-        {errors.confirmPassword ? (
-          <Text style={styles.errorText}>{errors.confirmPassword}</Text>
-        ) : null}
-        <View style={styles.locationContainer}>
-          <View style={styles.iconContainer}>
-            <Icon
-              name="map-marker"
-              size={30}
-              color="#900"
-              onPress={getPermissions}
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry={true}
+            onChangeText={(text: string) => setPassword(text)}
+            value={password}
+          />
+          {errors.password ? (
+            <Text style={styles.errorText}>{errors.password}</Text>
+          ) : null}
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm Password"
+            secureTextEntry={true}
+            onChangeText={(text: string) => setConfirmPassword(text)}
+            value={confirmPassword}
+          />
+          {errors.confirmPassword ? (
+            <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+          ) : null}
+          <View style={styles.locationContainer}>
+            <View style={styles.iconContainer}>
+              <Icon
+                name="map-marker"
+                size={30}
+                color="#900"
+                onPress={getPermissions}
+              />
+            </View>
+            <SafeAreaView style={styles.autocompleteContainer}>
+              <GooglePlacesAutocomplete
+                placeholder={
+                  mapClicked ? `${address}` : "Type place or click map icon"
+                }
+                onPress={(data, details = null) => {
+                  setAddress(data.description);
+                }}
+                query={{
+                  key: "AIzaSyAymCFwSwX9TMrFGmhJrLAdZJdgLLVImSc",
+                  // limit search results in Ethiopia
+                  components: "country:et",
+                  types: ["(cities)"],
+                }}
+                fetchDetails={true}
+                onFail={(error) => console.log(error)}
+                onNotFound={() => console.log("no results")}
+                styles={{
+                  container: {
+                    flex: 0,
+                  },
+                }}
+              />
+            </SafeAreaView>
+          </View>
+          {errors.address ? (
+            <Text style={styles.errorText}>{errors.address}</Text>
+          ) : null}
+          <View style={styles.dropdownContainer}>
+          <Text>{``}</Text>
+            <Text>Role:</Text>
+            <RNPickerSelect
+              items={options}
+              onValueChange={(value) => setIsBuyer(value)}
+              value={isBuyer}
+              style={pickerSelectStyles}
+              useNativeAndroidPickerStyle={false}
             />
           </View>
-          <SafeAreaView style={styles.autocompleteContainer}>
-            <GooglePlacesAutocomplete
-              placeholder={
-                mapClicked ? `${address}` : "Type place or click map icon"
-              }
-              onPress={(data, details = null) => {
-                setAddress(data.description);
-              }}
-              query={{
-                key: "AIzaSyAymCFwSwX9TMrFGmhJrLAdZJdgLLVImSc",
-                // limit search results in Ethiopia
-                components: "country:et",
-                types: ["(cities)"],
-              }}
-              fetchDetails={true}
-              onFail={(error) => console.log(error)}
-              onNotFound={() => console.log("no results")}
-              styles={{
-                container: {
-                  flex: 0,
-                },
-              }}
-            />
-          </SafeAreaView>
+          <Text>{``}</Text> 
+          <Button title="Create Account" onPress={register} />
         </View>
-        {errors.address ? (
-          <Text style={styles.errorText}>{errors.address}</Text>
-        ) : null}
-        <View style={styles.dropdownContainer}>
-          <Text>Role:</Text>
-          <RNPickerSelect
-            items={options}
-            onValueChange={(value) => setIsBuyer(value)}
-            value={isBuyer}
-          />
-        </View>
-
-        <Button title="Create Account" onPress={register} />
-      </View>
-    </View>
+      </SafeAreaView>
     // </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  form: {
-    width: "60%",
-    alignSelf: "center",
-    marginTop: 20,
-  },
-  input: {
-    height: 44,
-    width: 250,
-    borderWidth: 1,
-    borderRadius: 4,
-    padding: 10,
-    backgroundColor: "#fff",
-    marginBottom: 10,
-  },
-  NameInput: {
-    height: 44,
-    width: 125,
-    borderWidth: 1,
-    borderRadius: 4,
-    padding: 10,
-    backgroundColor: "#fff",
-    marginBottom: 10,
-  },
   container: {
     alignItems: "center",
-    // flexGrow: 1,
     width: "100%",
+    padding: 20,
+    backgroundColor: "#f5f5f5",
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -276,32 +262,91 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    alignSelf: "center",
-    marginTop: 10,
+    marginVertical: 20,
   },
-  dropdownContainer: {
-    // flex: 1,
-    // height: 44,
+  form: {
+    width: "100%",
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  input: {
+    height: 44,
     borderWidth: 1,
+    borderColor: "#ccc",
     borderRadius: 4,
     padding: 10,
     backgroundColor: "#fff",
     marginBottom: 10,
   },
+  NameInput: {
+    height: 44,
+    width: "48%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 4,
+    padding: 10,
+    backgroundColor: "#fff",
+    marginBottom: 10,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   errorText: {
     color: "red",
+    fontSize: 12,
+    marginBottom: 10,
+  },
+  dropdownContainer: {
+    height: 50,
+    justifyContent: "center",
     marginBottom: 10,
   },
   locationContainer: {
     flexDirection: "row",
-    padding: 5,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 4,
   },
   iconContainer: {
-    justifyContent: "center",
-    marginRight: 5,
+    width: "10%",
+    alignItems: "center",
   },
   autocompleteContainer: {
     flex: 1,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 4,
+    color: "black",
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    // borderColor: "purple",
+    borderRadius: 8,
+    color: "black",
+    paddingRight: 30, // to ensure the text is never behind the icon
   },
 });
 

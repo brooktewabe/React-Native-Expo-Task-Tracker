@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Button, StyleSheet, ScrollView, Text } from 'react-native';
+import { View, TextInput, Button, StyleSheet, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
 import { API_URL } from "../context/AuthContext";
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,28 +12,15 @@ const UpdateProfileScreen = () => {
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-   const dispatch = useDispatch();
-
+  const dispatch = useDispatch();
   const navigation = useNavigation();
-
   const userData = useSelector((state) => state.auth.userData);
-  // console.log('Redux Store Data:', userData);
 
   const handleUpdateProfile = () => {
-    const updatedUserInfo = {
-      email,
-      firstName,
-      lastName,
-      userName,
-    };
-
-    console.log('Updating profile with:', updatedUserInfo); 
-
+    const updatedUserInfo = { email, firstName, lastName, userName };
     axios.put(`${API_URL}/profile?id=${userData._id}`, updatedUserInfo)
       .then(response => {
-        console.log('Success', 'Profile updated successfully');
         dispatch(setUserData({ userData: response.data }));
-
         setSuccessMessage('Profile updated successfully');
       })
       .catch(error => {
@@ -50,46 +37,51 @@ const UpdateProfileScreen = () => {
       setUserName(userData.userName || '');
     }
   }, [userData]);
+
   useEffect(() => {
     if (successMessage) {
       const timeout = setTimeout(() => {
         setSuccessMessage('');
-        // Redirect to home screen
         navigation.navigate('Home');
-      }, 2000); // Delay for 2 seconds
+      }, 2000);
       return () => clearTimeout(timeout);
     }
   }, [successMessage]);
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
+      <Text>{``}</Text>
         <View style={styles.form}>
           <TextInput
             style={styles.input}
             placeholder="First name"
-            onChangeText={(text: string) => setFirstName(text)}
+            onChangeText={(text) => setFirstName(text)}
             value={firstName}
           />
           <TextInput
             style={styles.input}
             placeholder="Last name"
-            onChangeText={(text: string) => setLastName(text)}
+            onChangeText={(text) => setLastName(text)}
             value={lastName}
           />
           <TextInput
             style={styles.input}
             placeholder="Email"
-            onChangeText={(text: string) => setEmail(text)}
+            onChangeText={(text) => setEmail(text)}
             value={email}
           />
           <TextInput
             style={styles.input}
             placeholder="Username"
-            onChangeText={(text: string) => setUserName(text)}
+            onChangeText={(text) => setUserName(text)}
             value={userName}
           />
-           {successMessage ? <Text style={styles.successMessage}>{successMessage}</Text> : null}
+          {successMessage ? <Text style={styles.successMessage}>{successMessage}</Text> : null}
           <Button title="Update Account" onPress={handleUpdateProfile} />
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Text style={styles.link}>Go to Home</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -97,63 +89,42 @@ const UpdateProfileScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  scrollViewContent: {
+    flexGrow: 1,
+  },
+  container: {
+    alignItems: "center",
+    width: "100%",
+  },
+  image: {
+    width: "50%",
+    height: "50%",
+    resizeMode: "contain",
+  },
   form: {
     width: "60%",
-    alignSelf: "center",
-    marginTop: 20,
+    gap: 10,
   },
   input: {
     height: 44,
-    width:250,
     borderWidth: 1,
     borderRadius: 4,
     padding: 10,
     backgroundColor: "#fff",
-    marginBottom: 10,
-  },  
+  },
   successMessage: {
     color: 'green',
     alignSelf: 'center',
     marginTop: 10,
   },
-  container: {
-    alignItems: "center",
-    // flexGrow: 1,
-    width: "100%",
-  },
-  scrollViewContent: {
-    flexGrow: 1,
-  },
-  profilePic: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    alignSelf: "center",
+  link: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginLeft: 35,
+    marginRight: 35,
     marginTop: 10,
-  },
-  dropdownContainer: {
-    // flex: 1,
-    // height: 44,
-    borderWidth: 1,
-    borderRadius: 4,
-    padding: 10,
-    backgroundColor: "#fff",
     marginBottom: 10,
-  },
-  errorText: {
-    color: "red",
-    marginBottom: 10,
-  },
-  locationContainer: {
-    flexDirection: "row",
-    padding: 5,
-  },
-  iconContainer: {
-    justifyContent: "center",
-    marginRight: 5,
-  },
-  autocompleteContainer: {
-    flex: 1,
+    color: '#00a3cc',
   },
 });
 
