@@ -5,7 +5,6 @@ import {
   TextInput,
   Button,
   SafeAreaView,
-  Image,
   ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
