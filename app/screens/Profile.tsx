@@ -42,7 +42,7 @@ const UpdateProfileScreen = () => {
     if (successMessage) {
       const timeout = setTimeout(() => {
         setSuccessMessage('');
-        navigation.navigate('Home');
+        navigation.navigate('TodoList');
       }, 2000);
       return () => clearTimeout(timeout);
     }
@@ -79,8 +79,8 @@ const UpdateProfileScreen = () => {
           />
           {successMessage ? <Text style={styles.successMessage}>{successMessage}</Text> : null}
           <Button title="Update Account" onPress={handleUpdateProfile} />
-          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-            <Text style={styles.link}>Go to Home</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('TodoList')}>
+            <Text style={styles.link}>Go to Tasks</Text>
           </TouchableOpacity>
         </View>
       </View>

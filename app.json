@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Frontend-Exercise2",
-    "slug": "Frontend-Exercise2",
+    "name": "IE-Tasks",
+    "slug": "IE-Tasks",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +22,13 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.brooktewabe.FrontendExercise2"
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "package": "com.brooktewabe.IETasks"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -32,7 +38,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "1db11026-fb0f-48f6-ad2f-724d0f27cd6b"
+        "projectId": "2cb6e7ae-7986-4b46-82f9-f5079901dbcf"
       }
     }
   }

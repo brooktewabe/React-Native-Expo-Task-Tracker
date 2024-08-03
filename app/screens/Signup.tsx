@@ -35,7 +35,8 @@ const Signup = () => {
 
     if (!email) {
       errors.email = "Email is required.";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } 
+    if (!/\S+@\S+\.\S+/.test(email)) {
       errors.email = "Email is invalid.";
     }
     if (!password) errors.password = "Password is required";
@@ -44,10 +45,8 @@ const Signup = () => {
     if (password !== confirmPassword) {
       errors.confirmPassword = "Passwords do not match";
     }
-    if (!firstName || !lastName) errors.firstName = "Required";
+    if (!firstName) errors.firstName = "Required";
     if (!lastName) errors.lastName = "Required";
-    if (!userName) errors.userName = "Username is required";
-    if (!address) errors.address = "Address is required";
 
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -144,7 +143,11 @@ const Signup = () => {
             <TextInput
               style={styles.NameInput}
               placeholder="Last name"
-              onChangeText={(text: string) => setLastName(text)}
+              onChangeText={(text: string) => {
+                setLastName(text) 
+                setUserName(firstName + lastName)
+              }
+            }
               value={lastName}
             />
             {errors.lastName ? (
@@ -162,15 +165,15 @@ const Signup = () => {
           {errors.email ? (
             <Text style={styles.errorText}>{errors.email}</Text>
           ) : null}
-          <TextInput
+          {/* <TextInput
             style={styles.input}
             placeholder="Username"
             onChangeText={(text: string) => setUserName(text)}
             value={userName}
-          />
-          {errors.userName ? (
+          /> */}
+          {/* {errors.userName ? (
             <Text style={styles.errorText}>{errors.userName}</Text>
-          ) : null}
+          ) : null} */}
           <TextInput
             style={styles.input}
             placeholder="Password"
@@ -228,17 +231,6 @@ const Signup = () => {
           {errors.address ? (
             <Text style={styles.errorText}>{errors.address}</Text>
           ) : null}
-          <View style={styles.dropdownContainer}>
-          <Text>{``}</Text>
-            <Text>Role:</Text>
-            <RNPickerSelect
-              items={options}
-              onValueChange={(value) => setIsBuyer(value)}
-              value={isBuyer}
-              style={pickerSelectStyles}
-              useNativeAndroidPickerStyle={false}
-            />
-          </View>
           <Text>{``}</Text> 
           <Button title="Create Account" onPress={register} />
         </View>

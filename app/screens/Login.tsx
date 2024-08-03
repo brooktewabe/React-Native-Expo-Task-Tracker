@@ -12,6 +12,7 @@ import {
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
+import { ImagesAssets } from "../../assets/ImagesAssets";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -33,7 +34,7 @@ const Login = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <Image 
-        source={{ uri: 'https://galaxies.dev/img/logos/logo--blue.png' }} 
+        source={ImagesAssets.icon}
         style={styles.image}
       />
       <View style={styles.form}>
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
   },
   image: {
-    width: "50%",
+    width: "40%",
     height: "30%",
     resizeMode: "contain",
     marginBottom: 20,
