@@ -49,7 +49,9 @@ export default function TodoItem({
 
       <View style={styles.rowContainer}>
         {editable ? (
-          <Button title="Save" onPress={handleUpdateTodo} disabled={!title} />
+                <TouchableOpacity onPress={handleUpdateTodo} disabled={!title} >
+                <Image source={ImagesAssets.saveIcon} style={{ width: 24, height: 24 }} />
+              </TouchableOpacity>
         ) : (
                 <TouchableOpacity onPress={handleDeleteTodo}>
                   <Image source={ImagesAssets.deleteIcon} style={{ width: 24, height: 24 }} />
