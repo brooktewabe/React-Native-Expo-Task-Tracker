@@ -4,9 +4,9 @@
 
 - SQLite Database 
 
-- SignUp, login, home, and Profile screens
+- SignUp, login, home and Profile screens
 
-- SignUp includes - Google Places Autocomplete, Fetch current location, Error handling
+- SignUp includes - Google Places Autocompelete, Fetch current location, Error handling
 
 - Login - A simple JWT login
 
