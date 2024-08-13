@@ -1,121 +1,217 @@
-import { 
-  View, 
-  Text, 
-  Image, 
-  StyleSheet, 
-  TextInput, 
-  Button, 
-  TouchableOpacity, 
-  KeyboardAvoidingView, 
-  Platform 
-} from "react-native";
-import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
+} from 'react-native';
+import * as LocalAuthentication from 'expo-local-authentication';
 import { ImagesAssets } from "../../assets/ImagesAssets";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const { onLogin } = useAuth();
-  const navigation = useNavigation();
+const Login = ({ onLoginSuccess }) => {
+  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+  const [passcode, setPasscode] = useState('');
+  const [inputCount, setInputCount] = useState(0);
 
-  const login = async () => {
-    const result = await onLogin!(email, password);
-    if (result && result.error) {
-      setError(result.message);
+  useEffect(() => {
+    (async () => {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      setIsBiometricSupported(compatible);
+    })();
+  }, []);
+
+  const fallBackToDefaultAuth = () => {
+    console.log('fall back to password authentication');
+  };
+
+  const alertComponent = (title, mess, btnTxt, btnFunc) => {
+    return Alert.alert(title, mess, [
+      {
+        text: btnTxt,
+        onPress: btnFunc,
+      },
+    ]);
+  };
+
+  const handleBiometricAuth = async () => {
+    const isBiometricAvailable = await LocalAuthentication.hasHardwareAsync();
+
+    if (!isBiometricAvailable) {
+      return alertComponent(
+        'Please enter your passcode',
+        'Biometric Authentication not supported',
+        'OK',
+        () => fallBackToDefaultAuth()
+      );
+    }
+
+    const savedBiometrics = await LocalAuthentication.isEnrolledAsync();
+    if (!savedBiometrics) {
+      return alertComponent(
+        'Biometric record not found',
+        'Please login with your passcode',
+        'OK',
+        () => fallBackToDefaultAuth()
+      );
+    }
+
+    const biometricAuth = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Login with Biometrics',
+      cancelLabel: 'Cancel',
+      disableDeviceFallback: true,
+    });
+
+    if (biometricAuth.success) {
+      console.log('Biometric authentication success');
+      onLoginSuccess(); 
+    } else {
+      alertComponent(
+        'Authentication failed',
+        'Biometric Authentication failed',
+        'OK',
+        () => {}
+      );
     }
   };
 
+  const handlePasscodeInput = (digit) => {
+    const newPasscode = passcode + digit;
+    if (inputCount < 3) {
+      setPasscode(newPasscode);
+      setInputCount(inputCount + 1);
+    } else {
+      setPasscode(newPasscode);
+      setInputCount(inputCount + 1);
+      handlePasscodeAuth(newPasscode);
+    }
+  };
+
+  const handlePasscodeAuth = (enteredPasscode) => {
+    if (enteredPasscode === '1234') { 
+      console.log('Passcode authentication success');
+      setPasscode(''); 
+      setInputCount(0); 
+      onLoginSuccess(); 
+    } else {
+      Alert.alert('Authentication failed', 'Incorrect passcode', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setPasscode(''); 
+            setInputCount(0); 
+          },
+        },
+      ]);
+    }
+  };
+
+  const renderPasscodeDots = () => {
+    const dots = [];
+    for (let i = 0; i < 4; i++) {
+      dots.push(
+        <View
+          key={i}
+          style={[styles.dot, { backgroundColor: i < inputCount ? '#000' : '#FFF' }]}
+        />
+      );
+    }
+    return dots;
+  };
+
   return (
-    <KeyboardAvoidingView 
-      style={styles.container} 
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <Image 
-        source={ImagesAssets.icon}
-        style={styles.image}
-      />
-      <View style={styles.form}>
-        <TextInput 
-          style={styles.input} 
-          placeholder="Email" 
-          onChangeText={(text: string) => setEmail(text)} 
-          value={email} 
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
+    <SafeAreaView style={styles.container}>
+      <View style={styles.innerContainer}>
+        <Image 
+          source={ImagesAssets.logoIcon}
+          style={styles.image}
         />
-        <TextInput 
-          style={styles.input} 
-          placeholder="Password" 
-          secureTextEntry={true} 
-          onChangeText={(text: string) => setPassword(text)} 
-          value={password}
-        />
+        <Text style={styles.title}>Enter Your Passcode</Text>
+        <View style={styles.passcodeContainer}>{renderPasscodeDots()}</View>
 
-        {error ? <Text style={styles.error}>{error}</Text> : null}
+        <View style={styles.keypad}>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((digit) => (
+            <TouchableOpacity
+              key={digit}
+              style={styles.keypadButton}
+              onPress={() => handlePasscodeInput(digit.toString())}
+            >
+              <Text style={styles.keypadButtonText}>{digit}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-        <Button title="Sign In" onPress={login} />
-        <TouchableOpacity onPress={() => navigation.navigate('Signup')} >
-          <Text style={styles.link}>Create Account</Text>
-        </TouchableOpacity>
+        {isBiometricSupported && (
+          <TouchableOpacity onPress={handleBiometricAuth}>
+            <Image
+              source={ImagesAssets.bioIcon}
+              style={{ width: 64, height: 64 }}
+            />
+          </TouchableOpacity>
+        )}
       </View>
-    </KeyboardAvoidingView>
-  )
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    backgroundColor: "#f5f5f5",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'lightblue',
   },
-  image: {
-    width: "40%",
-    height: "30%",
-    resizeMode: "contain",
+  innerContainer: {
+    width: '80%',
+    alignItems: 'center',
+    backgroundColor: 'lightblue',
+    // padding: 20,
+    // borderRadius: 10,
+    // elevation: 5,
+  },
+  title: {
+    fontSize: 24,
     marginBottom: 20,
   },
-  form: {
-    gap: 10,
-    width: "80%",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+  passcodeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20,
   },
-  input: {
-    width: "100%",
-    height: 44,
+  dot: {
+    width: 15,
+    height: 15,
+    borderRadius: 7.5,
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 4,
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: "#fff",
+    borderColor: 'silver',
+    margin: 5,
   },
-  link: {
-    fontSize: 16,
-    textAlign: "center",
-    color: "#00a3cc",
-    marginTop: 10,
+  keypad: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 20,
   },
-  error: {
-    color: "red",
-    marginBottom: 10,
-    textAlign: "center",
+  keypadButton: {
+    width: 70,
+    height: 70,
+    alignItems: 'center',
+    borderRadius: 35,
+    padding: 15,
+    margin: 5,
+    borderWidth: 1,
+    borderColor: '#000',
+  },
+  keypadButtonText: {
+    fontSize: 24,
+  },
+  image: {
+    width: "20%",
+    height: "15%",
+    resizeMode: "contain",
+    marginBottom: 20,
   },
 });
 

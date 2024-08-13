@@ -58,14 +58,12 @@ export default function TodoList() {
   const handleChangeText = (text: string) => setTitle(text);
   const handleEditPress = () => setEditMode(!editMode);
 
-  const ItemSeparator = () => (
-    <View style={styles.separator} />
-  );
-  
+  const ItemSeparator = () => <View style={styles.separator} />;
+
   return (
     <View style={styles.container}>
       <View style={[styles.headerContainer, { marginBottom: 16 }]}>
-        <Text style={styles.header}>Task list</Text>
+        <Text style={styles.header}>Task List</Text>
 
         {editMode ? (
           <TouchableOpacity onPress={handleEditPress}>
@@ -92,7 +90,6 @@ export default function TodoList() {
           onChangeText={handleChangeText}
         />
 
-        {/* <Button title="+ Add" onPress={handleAddTodo} disabled={!title} /> */}
         <TouchableOpacity onPress={handleAddTodo} disabled={!title}>
           <Image
             source={ImagesAssets.addIcon}
@@ -100,7 +97,7 @@ export default function TodoList() {
           />
         </TouchableOpacity>
       </View>
-      <Text>{``}</Text> 
+      <Text>{``}</Text>
       <FlatList
         data={todos}
         renderItem={renderItem}
@@ -124,6 +121,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
+    paddingTop: 30,
   },
 
   headerContainer: {
@@ -144,9 +142,6 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 10,
     backgroundColor: "#fff",
-  },
-  profileContainer: {
-    alignItems: "flex-end",
   },
   separator: {
     height: 1,
