@@ -6,5 +6,5 @@
 
 - Home - CRUD Tasks 
 
-- Password and fingerprint authentication
+- Password and biometric authentication
 
