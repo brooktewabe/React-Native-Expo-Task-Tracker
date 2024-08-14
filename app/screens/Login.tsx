@@ -132,15 +132,27 @@ const Login = ({ onLoginSuccess }) => {
         <View style={styles.passcodeContainer}>{renderPasscodeDots()}</View>
 
         <View style={styles.keypad}>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((digit) => (
-            <TouchableOpacity
-              key={digit}
-              style={styles.keypadButton}
-              onPress={() => handlePasscodeInput(digit.toString())}
-            >
-              <Text style={styles.keypadButtonText}>{digit}</Text>
-            </TouchableOpacity>
+          {[1, 4, 7].map((digit) => (
+            <View key={digit} style={styles.keypadRow}>
+              {[digit, digit + 1, digit + 2].map((btnDigit) => (
+                <TouchableOpacity
+                  key={btnDigit}
+                  style={styles.keypadButton}
+                  onPress={() => handlePasscodeInput(btnDigit.toString())}
+                >
+                  <Text style={styles.keypadButtonText}>{btnDigit}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           ))}
+          <View style={styles.keypadRow}>
+            <TouchableOpacity
+              style={styles.keypadButton}
+              onPress={() => handlePasscodeInput('0')}
+            >
+              <Text style={styles.keypadButtonText}>0</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {isBiometricSupported && (
@@ -167,9 +179,6 @@ const styles = StyleSheet.create({
     width: '80%',
     alignItems: 'center',
     backgroundColor: 'lightblue',
-    // padding: 20,
-    // borderRadius: 10,
-    // elevation: 5,
   },
   title: {
     fontSize: 24,
@@ -189,10 +198,15 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   keypad: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: 'column', // Stack rows vertically
     justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 20,
+  },
+  keypadRow: {
+    flexDirection: 'row',
+    width: 210, // Fixed width to ensure 3 buttons per row
+    justifyContent: 'center',
   },
   keypadButton: {
     width: 70,
@@ -203,6 +217,7 @@ const styles = StyleSheet.create({
     margin: 5,
     borderWidth: 1,
     borderColor: '#000',
+    justifyContent: 'center',
   },
   keypadButtonText: {
     fontSize: 24,
