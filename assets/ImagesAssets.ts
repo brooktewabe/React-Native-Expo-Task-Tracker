@@ -6,6 +6,7 @@ export const ImagesAssets = {
     exitIcon: require('./exit.png'),
     logoIcon: require('./logo.png'),
     taskIcon: require('./task.png'),
-    icon: require('./icon.png'),
+    icon: require('./icon1.png'),
     saveIcon: require('./file.png'),
+    bioIcon: require('./finger-scan.png'),
 };
