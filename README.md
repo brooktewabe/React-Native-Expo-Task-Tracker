@@ -6,5 +6,5 @@
 
 - Home - CRUD Tasks 
 
-- Password and biometric authentication
+- Local Password and biometric authentication
 
