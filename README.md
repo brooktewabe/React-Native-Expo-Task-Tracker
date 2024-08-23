@@ -6,5 +6,5 @@
 
 - Home - CRUD Tasks 
 
-- Local Password and biometric authentication
+- Local Password and biometric authentication (uses the device's biometric data)
 
