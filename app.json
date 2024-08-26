@@ -7,9 +7,9 @@
     "icon": "./assets/edit-blue.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/icon1.png",
+      "image": "./assets/add.png",
       "resizeMode": "contain",
-      "backgroundColor": "#cdd3d4"
+      "backgroundColor": "#CEEAF3"
     },
     "assetBundlePatterns": [
       "**/*"
