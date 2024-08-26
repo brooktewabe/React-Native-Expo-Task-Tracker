@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "IE-Tasks",
-    "slug": "IE-Tasks",
+    "name": "Tasks",
+    "slug": "Tasks",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/edit-blue.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash1.png",
+      "image": "./assets/icon1.png",
       "resizeMode": "contain",
       "backgroundColor": "#cdd3d4"
     },

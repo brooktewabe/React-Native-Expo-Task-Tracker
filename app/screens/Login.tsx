@@ -13,6 +13,7 @@ import { ImagesAssets } from "../../assets/ImagesAssets";
 
 const Login = ({ onLoginSuccess }) => {
   const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+  const [isBiometricEnrolled, setIsBiometricEnrolled] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [inputCount, setInputCount] = useState(0);
 
@@ -20,6 +21,29 @@ const Login = ({ onLoginSuccess }) => {
     (async () => {
       const compatible = await LocalAuthentication.hasHardwareAsync();
       setIsBiometricSupported(compatible);
+
+      if (compatible) {
+        const enrolled = await LocalAuthentication.isEnrolledAsync();
+        setIsBiometricEnrolled(enrolled);
+
+        if (enrolled) {
+          handleBiometricAuth(); // Attempt biometric authentication on component mount
+        } else {
+          alertComponent(
+            'Biometric record not found',
+            'Please login with your passcode',
+            'OK',
+            () => {} // Do nothing here, simply fall back to passcode entry
+          );
+        }
+      } else {
+        alertComponent(
+          'Biometric Authentication not supported',
+          'Please enter your passcode',
+          'OK',
+          () => {} // Do nothing here, simply fall back to passcode entry
+        );
+      }
     })();
   }, []);
 
@@ -27,8 +51,8 @@ const Login = ({ onLoginSuccess }) => {
     console.log('fall back to password authentication');
   };
 
-  const alertComponent = (title, mess, btnTxt, btnFunc) => {
-    return Alert.alert(title, mess, [
+  const alertComponent = (title, message, btnTxt, btnFunc) => {
+    return Alert.alert(title, message, [
       {
         text: btnTxt,
         onPress: btnFunc,
@@ -37,27 +61,6 @@ const Login = ({ onLoginSuccess }) => {
   };
 
   const handleBiometricAuth = async () => {
-    const isBiometricAvailable = await LocalAuthentication.hasHardwareAsync();
-
-    if (!isBiometricAvailable) {
-      return alertComponent(
-        'Please enter your passcode',
-        'Biometric Authentication not supported',
-        'OK',
-        () => fallBackToDefaultAuth()
-      );
-    }
-
-    const savedBiometrics = await LocalAuthentication.isEnrolledAsync();
-    if (!savedBiometrics) {
-      return alertComponent(
-        'Biometric record not found',
-        'Please login with your passcode',
-        'OK',
-        () => fallBackToDefaultAuth()
-      );
-    }
-
     const biometricAuth = await LocalAuthentication.authenticateAsync({
       promptMessage: 'Login with Biometrics',
       cancelLabel: 'Cancel',
@@ -66,7 +69,7 @@ const Login = ({ onLoginSuccess }) => {
 
     if (biometricAuth.success) {
       console.log('Biometric authentication success');
-      onLoginSuccess(); 
+      onLoginSuccess();
     } else {
       alertComponent(
         'Authentication failed',
@@ -90,18 +93,18 @@ const Login = ({ onLoginSuccess }) => {
   };
 
   const handlePasscodeAuth = (enteredPasscode) => {
-    if (enteredPasscode === '1234') { 
+    if (enteredPasscode === '1234') {
       console.log('Passcode authentication success');
-      setPasscode(''); 
-      setInputCount(0); 
-      onLoginSuccess(); 
+      setPasscode('');
+      setInputCount(0);
+      onLoginSuccess();
     } else {
       Alert.alert('Authentication failed', 'Incorrect passcode', [
         {
           text: 'OK',
           onPress: () => {
-            setPasscode(''); 
-            setInputCount(0); 
+            setPasscode('');
+            setInputCount(0);
           },
         },
       ]);
@@ -124,10 +127,10 @@ const Login = ({ onLoginSuccess }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
-        <Image 
-          source={ImagesAssets.logoIcon}
+        {/* <Image 
+          source={ImagesAssets.icon}
           style={styles.image}
-        />
+        /> */}
         <Text style={styles.title}>Enter Your Passcode</Text>
         <View style={styles.passcodeContainer}>{renderPasscodeDots()}</View>
 
