@@ -1,10 +1,9 @@
 ## React Native Expo App
-
-- Typescript 
+- Local Password and biometric authentication (uses the device's stored biometric data)
 
 - SQLite Database 
 
 - Home - CRUD Tasks 
 
-- Local Password and biometric authentication (uses the device's stored biometric data)
+- Typescript
 
